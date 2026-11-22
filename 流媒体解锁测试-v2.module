@@ -1,4 +1,4 @@
-#!url=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/流媒体解锁测试-v2.module
+#!url=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/流媒体解锁测试-v2.module
 #!name= 流媒体解锁测试 v2
 #!desc= https://streaming.test
 
@@ -12,7 +12,7 @@
 # ⚠️ 部署说明（必读）：
 #  下面标 [占位] 的 5 个 script-path 指向你自己的托管地址，
 #  安装前必须把
-#    https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/
+#    https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/
 #  替换成你真实的地址，例如你传到 GitHub 后的 raw 链接：
 #    https://raw.githubusercontent.com/你的用户名/你的仓库/main/streaming-test/v2/front-end-v2.js
 #  其他未改动的服务仍沿用 Sage 原版 GitHub 地址，不用动。
@@ -23,41 +23,41 @@
 
 Bahamut = type=http-request, pattern=^https:\/\/streaming\.test\/bahamut\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/bahamuts.js, timeout=60
 
-Steam = type=http-request, pattern=^https:\/\/streaming\.test\/steam\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/steam-v2.js, timeout=60
+Steam = type=http-request, pattern=^https:\/\/streaming\.test\/steam\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/steam-v2.js, timeout=60
 
-Bilibili = type=http-request, pattern=^https:\/\/streaming\.test\/bilibili\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/bilibili-v2.js, timeout=60
+Bilibili = type=http-request, pattern=^https:\/\/streaming\.test\/bilibili\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/bilibili-v2.js, timeout=60
 
-Spotify = type=http-request, pattern=^https:\/\/streaming\.test\/spotify\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/spotify-v2.js, timeout=60
+Spotify = type=http-request, pattern=^https:\/\/streaming\.test\/spotify\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/spotify-v2.js, timeout=60
 
 Scamalytics = type=http-request, pattern=^https:\/\/streaming\.test\/scamalytics\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/scamalytics.js, timeout=60
 
-Disney = type=http-request, pattern=^https:\/\/streaming\.test\/disney\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/disney-v2.js, timeout=60
+Disney = type=http-request, pattern=^https:\/\/streaming\.test\/disney\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/disney-v2.js, timeout=60
 
-Netflix = type=http-request, pattern=^https:\/\/streaming\.test\/netflix\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/netflix-v2.js, timeout=60
+Netflix = type=http-request, pattern=^https:\/\/streaming\.test\/netflix\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/netflix-v2.js, timeout=60
 
-ChatGPT = type=http-request, pattern=^https:\/\/streaming\.test\/chatgpt\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/chatgpt-v2.js, timeout=60
+ChatGPT = type=http-request, pattern=^https:\/\/streaming\.test\/chatgpt\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/chatgpt-v2.js, timeout=60
 
-Muse = type=http-request, pattern=^https:\/\/streaming\.test\/muse\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/muse.js, timeout=60
+Muse = type=http-request, pattern=^https:\/\/streaming\.test\/muse\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/muse.js, timeout=60
 
-Claude = type=http-request, pattern=^https:\/\/streaming\.test\/claude\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/claude.js, timeout=60
+Claude = type=http-request, pattern=^https:\/\/streaming\.test\/claude\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/claude.js, timeout=60
 
-Gemini = type=http-request, pattern=^https:\/\/streaming\.test\/gemini\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/gemini.js, timeout=60
+Gemini = type=http-request, pattern=^https:\/\/streaming\.test\/gemini\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/gemini.js, timeout=60
 
-Tiktok = type=http-request, pattern=^https:\/\/streaming\.test\/tiktok\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/tiktok-v2.js, timeout=60
+Tiktok = type=http-request, pattern=^https:\/\/streaming\.test\/tiktok\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/tiktok-v2.js, timeout=60
 
-YouTube = type=http-request, pattern=^https:\/\/streaming\.test\/youtube\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/youtube-v2.js, timeout=60
+YouTube = type=http-request, pattern=^https:\/\/streaming\.test\/youtube\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/youtube-v2.js, timeout=60
 
-HBO Max = type=http-request, pattern=^https:\/\/streaming\.test\/max\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/max-v2.js, timeout=60
+HBO Max = type=http-request, pattern=^https:\/\/streaming\.test\/max\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/max-v2.js, timeout=60
 
-PrimeVideo = type=http-request, pattern=^https:\/\/streaming\.test\/primevideo\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/primevideo-v2.js, timeout=60
+PrimeVideo = type=http-request, pattern=^https:\/\/streaming\.test\/primevideo\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/primevideo-v2.js, timeout=60
 
-Bing = type=http-request, pattern=^https:\/\/streaming\.test\/bing\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/bing-v2.js, timeout=60
+Bing = type=http-request, pattern=^https:\/\/streaming\.test\/bing\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/bing-v2.js, timeout=60
 
 ニコニコ = type=http-request, pattern=^https:\/\/streaming\.test\/nicovideo\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/niconico.js, timeout=60
 
-Google Play = type=http-request, pattern= ^https:\/\/streaming\.test\/googleplay\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/googleplay-v2.js, timeout=60
+Google Play = type=http-request, pattern= ^https:\/\/streaming\.test\/googleplay\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/googleplay-v2.js, timeout=60
 
-Wikipedia = type=http-request, pattern= ^https:\/\/streaming\.test\/wikipedia\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/wikipedia-v2.js, timeout=60
+Wikipedia = type=http-request, pattern= ^https:\/\/streaming\.test\/wikipedia\/?$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/wikipedia-v2.js, timeout=60
 
 Starz = type=http-request, pattern= ^https:\/\/streaming\.test\/starz\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/starz.js, timeout=60
 
@@ -79,7 +79,7 @@ IPv6 = type=http-request, pattern= ^https:\/\/streaming\.test\/ip\/?$, script-pa
 
 Surfsharkdns = type=http-request, pattern= ^https:\/\/streaming\.test\/dns\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/surfsharkdns.js, timeout=60
 
-Front-end = type=http-request, pattern=^https:\/\/streaming\.test\/$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/front-end-v2.js, timeout=60
+Front-end = type=http-request, pattern=^https:\/\/streaming\.test\/$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/front-end-v2.js, timeout=60
 
 [MITM]
 hostname = %APPEND% streaming.test
