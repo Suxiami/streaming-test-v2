@@ -1,4 +1,4 @@
-#!url=https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/流媒体解锁测试-v2.module
+#!url=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/流媒体解锁测试-v2.module
 #!name= 流媒体解锁测试 v2
 #!desc= https://streaming.test
 
@@ -12,7 +12,7 @@
 # ⚠️ 部署说明（必读）：
 #  下面标 [占位] 的 5 个 script-path 指向你自己的托管地址，
 #  安装前必须把
-#    https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/
+#    https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/
 #  替换成你真实的地址，例如你传到 GitHub 后的 raw 链接：
 #    https://raw.githubusercontent.com/你的用户名/你的仓库/main/streaming-test/v2/front-end-v2.js
 #  其他未改动的服务仍沿用 Sage 原版 GitHub 地址，不用动。
@@ -33,15 +33,15 @@ Scamalytics = type=http-request, pattern=^https:\/\/streaming\.test\/scamalytics
 
 Disney = type=http-request, pattern=^https:\/\/streaming\.test\/disney\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/disney.js, timeout=60
 
-Netflix = type=http-request, pattern=^https:\/\/streaming\.test\/netflix\/?$, script-path=https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/netflix-v2.js, timeout=60
+Netflix = type=http-request, pattern=^https:\/\/streaming\.test\/netflix\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/netflix-v2.js, timeout=60
 
 ChatGPT = type=http-request, pattern=^https:\/\/streaming\.test\/chatgpt\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/chatgpt.js, timeout=60
 
-Muse = type=http-request, pattern=^https:\/\/streaming\.test\/muse\/?$, script-path=https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/muse.js, timeout=60
+Muse = type=http-request, pattern=^https:\/\/streaming\.test\/muse\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/muse.js, timeout=60
 
-Claude = type=http-request, pattern=^https:\/\/streaming\.test\/claude\/?$, script-path=https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/claude.js, timeout=60
+Claude = type=http-request, pattern=^https:\/\/streaming\.test\/claude\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/claude.js, timeout=60
 
-Gemini = type=http-request, pattern=^https:\/\/streaming\.test\/gemini\/?$, script-path=https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/gemini.js, timeout=60
+Gemini = type=http-request, pattern=^https:\/\/streaming\.test\/gemini\/?$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/gemini.js, timeout=60
 
 Tiktok = type=http-request, pattern=^https:\/\/streaming\.test\/tiktok\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/tiktok.js, timeout=60
 
@@ -79,7 +79,7 @@ IPv6 = type=http-request, pattern= ^https:\/\/streaming\.test\/ip\/?$, script-pa
 
 Surfsharkdns = type=http-request, pattern= ^https:\/\/streaming\.test\/dns\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/surfsharkdns.js, timeout=60
 
-Front-end = type=http-request, pattern=^https:\/\/streaming\.test\/$, script-path=https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/front-end-v2.js, timeout=60
+Front-end = type=http-request, pattern=^https:\/\/streaming\.test\/$, script-path=https://raw.githubusercontent.com/Suxiami/streaming-test-v2/main/front-end-v2.js, timeout=60
 
 [MITM]
 hostname = %APPEND% streaming.test
