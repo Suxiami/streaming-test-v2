@@ -79,7 +79,7 @@ IPv6 = type=http-request, pattern= ^https:\/\/streaming\.test\/ip\/?$, script-pa
 
 Surfsharkdns = type=http-request, pattern= ^https:\/\/streaming\.test\/dns\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/surfsharkdns.js, timeout=60
 
-Front-end = type=http-request, pattern=^https:\/\/streaming\.test\/$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/front-end-v2.js?v=262, timeout=60
+Front-end = type=http-request, pattern=^https:\/\/streaming\.test\/$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@31b43dce7ccfa41e1889024a6c1ab8b534b7994d/front-end-v2.js, timeout=60
 
 [MITM]
 hostname = %APPEND% streaming.test
