@@ -313,9 +313,10 @@ return code;
 function shortDetail(result) {
 var msg = (result && result.message) || '';
 if (!msg) return result.status === 'success' ? '可用' : '不可用';
-var nl = msg.indexOf('\n');
+var NL = String.fromCharCode(10);
+var nl = msg.indexOf(NL);
 var firstLine = nl >= 0 ? msg.substring(0, nl) : msg;
-firstLine = firstLine.replace(/^[^:：]+[:：]\s*/, '');
+firstLine = firstLine.replace(/^[^:：]+[:：] */, '');
 if (firstLine) return firstLine;
 var m = msg.match(/地区[:：] *([A-Z]{2})/);
 if (!m) m = msg.match(/Region: *([A-Z]{2})/);
