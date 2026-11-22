@@ -1,4 +1,8 @@
-// 流媒体与 AI 解锁检测 v2 前端（v2.1 修 bug 版）
+// 流媒体与 AI 解锁检测 v2 前端（v2.5）
+// v2.5 改动：1. 一键全测进度条+计数实时更新（之前只改标题不改徽章，0/16 看着不动）
+// 2. 卡片加一行详情（地区/仅自制/可用，直接写在卡片上，照 unlock-check 的做法）
+// 3. 图标改彩色方块+字母（纯 HTML/CSS，不用 SVG，彻底杜绝图标不显示）
+// 4. 修 .module:hover.icon 选择器、修 #popup-message.summary-row 选择器
 // 相对 v2.0 的改动：
 // 1. 卡片不再由 JS 动态生成，16 个卡片全部写成静态 HTML，
 // 即使内联 JS 出任何问题，卡片照样显示，单个测试照样能点
@@ -91,7 +95,7 @@ background: rgba(255, 255, 255,.08);
 border: 1px solid rgba(255, 255, 255,.14);
 backdrop-filter: blur(12px);
 -webkit-backdrop-filter: blur(12px);
-padding: 22px 10px 18px;
+padding: 18px 10px 14px;
 box-shadow: 0 4px 16px rgba(0, 0, 0,.25);
 cursor: pointer;
 transition: transform.3s cubic-bezier(.34, 1.56,.64, 1), box-shadow.3s ease, background.3s ease, border-color.3s ease;
@@ -104,10 +108,10 @@ background: rgba(255, 255, 255,.14);
 border-color: rgba(255, 255, 255,.35);
 box-shadow: 0 14px 30px rgba(0, 0, 0,.4), 0 0 0 1px rgba(167, 139, 250,.35), 0 0 24px rgba(139, 92, 246,.35);
 }
-.module .icon { width: 64px; height: 64px; margin-bottom: 13px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.35)); transition: transform.3s ease;}
-.module:hover.icon { transform: scale(1.12) rotate(-3deg);}
-.module .icon svg { width: 100%; height: 100%; display: block;}
+.module .icon { width: 56px; height: 56px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 900; color: #fff; border-radius: 14px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.35)); transition: transform.3s ease;}
+.module:hover .icon { transform: scale(1.12) rotate(-3deg);}
 .module span { font-size: 16px; font-weight: 600; color: #f1f5f9; text-align: center;}
+.module .detail { font-size: 11px; font-weight: 500; color: #94a3b8; margin-top: 3px; text-align: center; line-height: 1.3; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .module .dot {
 width: 8px; height: 8px; border-radius: 50%;
 background: #64748b; margin-top: 9px;
@@ -151,13 +155,15 @@ font-weight: 700;
 #popup-badge span.fail { background: rgba(239, 68, 68,.2); color: #f87171; border: 1px solid rgba(239, 68, 68,.5);}
 #popup-badge span.loading { background: rgba(56, 189, 248,.15); color: #7dd3fc; border: 1px solid rgba(56, 189, 248,.4);}
 #popup-message { margin: 0 0 20px; font-size: 15px; line-height: 1.9; text-align: center; color: #cbd5e1; white-space: pre-line;}
-#popup-message.summary-row {
+#live-results .summary-row {
 display: flex; justify-content: space-between; align-items: center;
 text-align: left; padding: 9px 4px;
 border-bottom: 1px solid rgba(255, 255, 255,.08);
 font-size: 14px;
 }
-#popup-message.summary-row:last-child { border-bottom: none;}
+#live-results .summary-row:last-child { border-bottom: none;}
+.progress { height: 6px; background: rgba(255,255,255,.15); border-radius: 999px; overflow: hidden; margin: 2px 0 12px;}
+.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg,#6366f1,#d946ef); border-radius: 999px; transition: width .3s ease;}
 .spinner {
 width: 34px; height: 34px; margin: 14px auto;
 border: 3px solid rgba(255, 255, 255,.2);
@@ -188,10 +194,11 @@ body { background: linear-gradient(160deg, #e0e7ff 0%, #fdf4ff 50%, #cffafe 100%
 .module { background: rgba(255, 255, 255,.75); border-color: rgba(15, 23, 42,.08); box-shadow: 0 4px 16px rgba(15, 23, 42,.1);}
 .module:hover,.module:active { background: rgba(255, 255, 255,.95); box-shadow: 0 14px 30px rgba(15, 23, 42,.18), 0 0 24px rgba(139, 92, 246,.25);}
 .module span { color: #1e293b;}
+.module .detail { color: #64748b;}
 #result-popup { background: rgba(255, 255, 255,.95); color: #1e293b; border-color: rgba(15, 23, 42,.1);}
 #result-popup h2 { color: #0f172a;}
 #popup-message { color: #475569;}
-#popup-message.summary-row { border-bottom-color: rgba(15, 23, 42,.08);}
+#live-results .summary-row { border-bottom-color: rgba(15, 23, 42,.08);}
 .footer { color: #94a3b8;}
 }
 </style>
@@ -208,32 +215,32 @@ body { background: linear-gradient(160deg, #e0e7ff 0%, #fdf4ff 50%, #cffafe 100%
 <div class="section" style="animation-delay:0ms">
 <h2>AI 助手</h2>
 <div class="container">
-<div class="module" style="animation-delay:0ms" onclick="runTest('Muse', 'muse')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#FF6B35"/><text x="32" y="43" text-anchor="middle" font-size="34" font-weight="900" fill="#fff" font-family="Arial, sans-serif">M</text></svg></div><span>Muse</span><div class="dot" id="dot-muse"></div></div>
-<div class="module" style="animation-delay:55ms" onclick="runTest('ChatGPT', 'chatgpt')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#10A37F"/><text x="32" y="39" text-anchor="middle" font-size="17" font-weight="800" fill="#fff" font-family="Arial, sans-serif">GPT</text></svg></div><span>ChatGPT</span><div class="dot" id="dot-chatgpt"></div></div>
-<div class="module" style="animation-delay:110ms" onclick="runTest('Claude', 'claude')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#D97757"/><text x="32" y="43" text-anchor="middle" font-size="34" font-weight="900" fill="#fff" font-family="Arial, sans-serif">C</text></svg></div><span>Claude</span><div class="dot" id="dot-claude"></div></div>
-<div class="module" style="animation-delay:165ms" onclick="runTest('Gemini', 'gemini')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#1A73E8"/><path d="M32 10 L37 27 L54 32 L37 37 L32 54 L27 37 L10 32 L27 27 Z" fill="#fff"/></svg></div><span>Gemini</span><div class="dot" id="dot-gemini"></div></div>
+<div class="module" style="animation-delay:0ms" onclick="runTest('Muse', 'muse')"><div class="icon" style="background:#FF6B35;color:#fff;font-size:28px">M</div><span>Muse</span><div class="detail" id="detail-muse">未测试</div><div class="dot" id="dot-muse"></div></div>
+<div class="module" style="animation-delay:55ms" onclick="runTest('ChatGPT', 'chatgpt')"><div class="icon" style="background:#10A37F;color:#fff;font-size:17px">GPT</div><span>ChatGPT</span><div class="detail" id="detail-chatgpt">未测试</div><div class="dot" id="dot-chatgpt"></div></div>
+<div class="module" style="animation-delay:110ms" onclick="runTest('Claude', 'claude')"><div class="icon" style="background:#D97757;color:#fff;font-size:28px">C</div><span>Claude</span><div class="detail" id="detail-claude">未测试</div><div class="dot" id="dot-claude"></div></div>
+<div class="module" style="animation-delay:165ms" onclick="runTest('Gemini', 'gemini')"><div class="icon" style="background:#1A73E8;color:#fff;font-size:28px">✦</div><span>Gemini</span><div class="detail" id="detail-gemini">未测试</div><div class="dot" id="dot-gemini"></div></div>
 </div>
 </div>
 <div class="section" style="animation-delay:120ms">
 <h2>流媒体</h2>
 <div class="container">
-<div class="module" style="animation-delay:0ms" onclick="runTest('YouTube', 'youtube')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#FF0000"/><path d="M26 22 L46 32 L26 42 Z" fill="#fff"/></svg></div><span>YouTube</span><div class="dot" id="dot-youtube"></div></div>
-<div class="module" style="animation-delay:55ms" onclick="runTest('Netflix', 'netflix')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#141414"/><text x="32" y="43" text-anchor="middle" font-size="34" font-weight="900" fill="#E50914" font-family="Arial, sans-serif">N</text></svg></div><span>Netflix</span><div class="dot" id="dot-netflix"></div></div>
-<div class="module" style="animation-delay:110ms" onclick="runTest('Disney+', 'disney')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#113CCF"/><text x="32" y="40" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" font-family="Arial, sans-serif">D+</text></svg></div><span>Disney+</span><div class="dot" id="dot-disney"></div></div>
-<div class="module" style="animation-delay:165ms" onclick="runTest('Spotify', 'spotify')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#1DB954"/><circle cx="32" cy="32" r="17" fill="none" stroke="#fff" stroke-width="3"/><path d="M23 27 Q32 23 41 27" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M24 33 Q32 29 40 33" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M25 39 Q32 36 39 39" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg></div><span>Spotify</span><div class="dot" id="dot-spotify"></div></div>
-<div class="module" style="animation-delay:220ms" onclick="runTest('HBO Max', 'max')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#002BE7"/><text x="32" y="39" text-anchor="middle" font-size="17" font-weight="900" fill="#fff" font-family="Arial, sans-serif">MAX</text></svg></div><span>HBO Max</span><div class="dot" id="dot-max"></div></div>
-<div class="module" style="animation-delay:275ms" onclick="runTest('PrimeVideo', 'primevideo')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#00A8E1"/><path d="M24 22 L40 32 L24 42 Z" fill="#fff"/><text x="32" y="54" text-anchor="middle" font-size="11" font-weight="800" fill="#fff" font-family="Arial, sans-serif">prime</text></svg></div><span>PrimeVideo</span><div class="dot" id="dot-primevideo"></div></div>
+<div class="module" style="animation-delay:0ms" onclick="runTest('YouTube', 'youtube')"><div class="icon" style="background:#FF0000;color:#fff;font-size:26px">▶</div><span>YouTube</span><div class="detail" id="detail-youtube">未测试</div><div class="dot" id="dot-youtube"></div></div>
+<div class="module" style="animation-delay:55ms" onclick="runTest('Netflix', 'netflix')"><div class="icon" style="background:#141414;color:#E50914;font-size:28px">N</div><span>Netflix</span><div class="detail" id="detail-netflix">未测试</div><div class="dot" id="dot-netflix"></div></div>
+<div class="module" style="animation-delay:110ms" onclick="runTest('Disney+', 'disney')"><div class="icon" style="background:#113CCF;color:#fff;font-size:20px">D+</div><span>Disney+</span><div class="detail" id="detail-disney">未测试</div><div class="dot" id="dot-disney"></div></div>
+<div class="module" style="animation-delay:165ms" onclick="runTest('Spotify', 'spotify')"><div class="icon" style="background:#1DB954;color:#fff;font-size:28px">S</div><span>Spotify</span><div class="detail" id="detail-spotify">未测试</div><div class="dot" id="dot-spotify"></div></div>
+<div class="module" style="animation-delay:220ms" onclick="runTest('HBO Max', 'max')"><div class="icon" style="background:#002BE7;color:#fff;font-size:16px">MAX</div><span>HBO Max</span><div class="detail" id="detail-max">未测试</div><div class="dot" id="dot-max"></div></div>
+<div class="module" style="animation-delay:275ms" onclick="runTest('PrimeVideo', 'primevideo')"><div class="icon" style="background:#00A8E1;color:#fff;font-size:28px">P</div><span>PrimeVideo</span><div class="detail" id="detail-primevideo">未测试</div><div class="dot" id="dot-primevideo"></div></div>
 </div>
 </div>
 <div class="section" style="animation-delay:240ms">
 <h2>其他服务</h2>
 <div class="container">
-<div class="module" style="animation-delay:0ms" onclick="runTest('TikTok', 'tiktok')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#000000"/><text x="32" y="44" text-anchor="middle" font-size="36" font-weight="700" fill="#fff" font-family="Arial, sans-serif">♪</text></svg></div><span>TikTok</span><div class="dot" id="dot-tiktok"></div></div>
-<div class="module" style="animation-delay:55ms" onclick="runTest('Bing', 'bing')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#00809D"/><text x="32" y="43" text-anchor="middle" font-size="34" font-weight="900" fill="#fff" font-family="Arial, sans-serif">B</text></svg></div><span>Bing</span><div class="dot" id="dot-bing"></div></div>
-<div class="module" style="animation-delay:110ms" onclick="runTest('Bilibili', 'bilibili')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#00A1D6"/><text x="32" y="39" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" font-family="Arial, sans-serif">bili</text></svg></div><span>Bilibili</span><div class="dot" id="dot-bilibili"></div></div>
-<div class="module" style="animation-delay:165ms" onclick="runTest('Steam', 'steam')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#1B2838"/><circle cx="32" cy="32" r="16" fill="none" stroke="#fff" stroke-width="3"/><circle cx="32" cy="32" r="5" fill="#fff"/><circle cx="44" cy="20" r="3.5" fill="#fff"/></svg></div><span>Steam</span><div class="dot" id="dot-steam"></div></div>
-<div class="module" style="animation-delay:220ms" onclick="runTest('Google Play', 'googleplay')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#01875F"/><path d="M25 20 L45 32 L25 44 Z" fill="#fff"/></svg></div><span>Google Play</span><div class="dot" id="dot-googleplay"></div></div>
-<div class="module" style="animation-delay:275ms" onclick="runTest('Wikipedia', 'wikipedia')"><div class="icon"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/><text x="32" y="43" text-anchor="middle" font-size="32" font-weight="900" fill="#1E293B" font-family="Arial, sans-serif">W</text></svg></div><span>Wikipedia</span><div class="dot" id="dot-wikipedia"></div></div>
+<div class="module" style="animation-delay:0ms" onclick="runTest('TikTok', 'tiktok')"><div class="icon" style="background:#000000;color:#fff;font-size:30px">♪</div><span>TikTok</span><div class="detail" id="detail-tiktok">未测试</div><div class="dot" id="dot-tiktok"></div></div>
+<div class="module" style="animation-delay:55ms" onclick="runTest('Bing', 'bing')"><div class="icon" style="background:#00809D;color:#fff;font-size:28px">B</div><span>Bing</span><div class="detail" id="detail-bing">未测试</div><div class="dot" id="dot-bing"></div></div>
+<div class="module" style="animation-delay:110ms" onclick="runTest('Bilibili', 'bilibili')"><div class="icon" style="background:#00A1D6;color:#fff;font-size:15px">bili</div><span>Bilibili</span><div class="detail" id="detail-bilibili">未测试</div><div class="dot" id="dot-bilibili"></div></div>
+<div class="module" style="animation-delay:165ms" onclick="runTest('Steam', 'steam')"><div class="icon" style="background:#1B2838;color:#fff;font-size:20px">St</div><span>Steam</span><div class="detail" id="detail-steam">未测试</div><div class="dot" id="dot-steam"></div></div>
+<div class="module" style="animation-delay:220ms" onclick="runTest('Google Play', 'googleplay')"><div class="icon" style="background:#01875F;color:#fff;font-size:28px">G</div><span>Google Play</span><div class="detail" id="detail-googleplay">未测试</div><div class="dot" id="dot-googleplay"></div></div>
+<div class="module" style="animation-delay:275ms" onclick="runTest('Wikipedia', 'wikipedia')"><div class="icon" style="background:#FFFFFF;color:#1E293B;font-size:28px">W</div><span>Wikipedia</span><div class="detail" id="detail-wikipedia">未测试</div><div class="dot" id="dot-wikipedia"></div></div>
 </div>
 </div>
 </div>
@@ -292,6 +299,38 @@ var dot = document.getElementById('dot-' + endpoint);
 if (dot) dot.className = 'dot ' + dotClassFor(status);
 }
 
+var COUNTRY = { 'US': ['🇺🇸', '美国'], 'JP': ['🇯🇵', '日本'], 'SG': ['🇸🇬', '新加坡'], 'HK': ['🇭🇰', '香港'], 'TW': ['🇨🇳', '台湾'], 'KR': ['🇰🇷', '韩国'], 'GB': ['🇬🇧', '英国'], 'DE': ['🇩🇪', '德国'], 'FR': ['🇫🇷', '法国'], 'CA': ['🇨🇦', '加拿大'], 'AU': ['🇦🇺', '澳大利亚'], 'NL': ['🇳🇱', '荷兰'], 'IN': ['🇮🇳', '印度'], 'BR': ['🇧🇷', '巴西'], 'MX': ['🇲🇽', '墨西哥'], 'IT': ['🇮🇹', '意大利'], 'ES': ['🇪🇸', '西班牙'], 'TR': ['🇹🇷', '土耳其'], 'ID': ['🇮🇩', '印尼'], 'TH': ['🇹🇭', '泰国'], 'MY': ['🇲🇾', '马来西亚'], 'PH': ['🇵🇭', '菲律宾'], 'VN': ['🇻🇳', '越南'], 'AR': ['🇦🇷', '阿根廷'], 'NZ': ['🇳🇿', '新西兰'], 'CH': ['🇨🇭', '瑞士'], 'SE': ['🇸🇪', '瑞典'], 'NO': ['🇳🇴', '挪威'], 'AE': ['🇦🇪', '阿联酋'] };
+
+function countryText(code) {
+if (!code) return '';
+var c = COUNTRY[code.toUpperCase()];
+if (c) return c[0] + ' ' + c[1];
+return code;
+}
+
+// 把检测返回的 message 提炼成卡片上的一行短字：地区 / 仅自制 / 全库 / 可用 / 不可用
+// 照 unlock-check 的做法：能用的服务直接在卡片上写它看到的国家
+function shortDetail(result) {
+var msg = (result && result.message) || '';
+var m = msg.match(/地区[:：] *([A-Z]{2})/);
+if (!m) m = msg.match(/Region: *([A-Z]{2})/);
+var region = m ? countryText(m[1]) : '';
+if (result.status === 'success') {
+if (msg.indexOf('全库') !== -1) return region ? region + ' · 全库' : '全库';
+return region || '可用';
+}
+if (result.status === 'partial') {
+if (msg.indexOf('自制') !== -1) return region ? region + ' · 仅自制' : '仅自制';
+return region ? region + ' · 部分可用' : '部分可用';
+}
+return '不可用';
+}
+
+function setDetail(endpoint, text) {
+var d = document.getElementById('detail-' + endpoint);
+if (d) d.textContent = text;
+}
+
 function showPopup(title, badgeHtml, messageHtml) {
 var t = document.getElementById('popup-title');
 var b = document.getElementById('popup-badge');
@@ -339,17 +378,21 @@ return Promise.race([req, timeout]);
 function runTest(name, endpoint) {
 try {
 showPopup('正在测试 ' + name, '<span class="loading">检测中…</span>', '<div class="spinner"></div>请稍候…');
+setDetail(endpoint, '检测中…');
 fetchResult(endpoint).then(function (result) {
 var msg = (result.message || '未知结果').replace(/\\n/g, '<br>');
 showPopup(name + ' 测试结果', badgeFor(result.status), msg);
 setDot(endpoint, result.status);
+setDetail(endpoint, shortDetail(result));
 }).catch(function () {
 showPopup(name + ' 测试失败', '<span class="fail">检测失败</span>', '请检查网络连接或分流规则');
 setDot(endpoint, 'failed');
+setDetail(endpoint, '检测失败');
 });
 } catch (e) {
 showPopup(name + ' 测试失败', '<span class="fail">检测失败</span>', '请检查网络连接或分流规则');
 setDot(endpoint, 'failed');
+setDetail(endpoint, '检测失败');
 }
 }
 
@@ -367,7 +410,7 @@ var results = [];
 var doneCount = 0;
 // 先弹出一个空的进度框，每测完一个就往里面加一行
 try {
-showPopup('一键全测', '<span class="loading">正在逐个检测… 0 / ' + services.length + '</span>', '<div id="live-results"></div>');
+showPopup('一键全测', '<span class="loading">正在逐个检测… 0 / ' + services.length + '</span>', '<div class="progress"><div class="progress-bar" id="progress-bar"></div></div><div id="live-results"></div>');
 } catch (e) {}
 function appendLiveResult(name, status, msg) {
 var box = document.getElementById('live-results');
@@ -382,13 +425,18 @@ right.textContent = mark + ' ' + (msg || '');
 row.appendChild(left);
 row.appendChild(right);
 box.appendChild(row);
-// 更新标题里的进度
+// 更新标题、徽章计数和进度条（之前只改标题不改徽章，用户盯着的 0/16 一直不动）
 var title = document.getElementById('popup-title');
 if (title) title.textContent = '一键全测 (' + doneCount + ' / ' + services.length + ')';
+var badge = document.getElementById('popup-badge');
+if (badge) badge.innerHTML = '<span class="loading">正在逐个检测… ' + doneCount + ' / ' + services.length + '</span>';
+var bar = document.getElementById('progress-bar');
+if (bar) bar.style.width = Math.round(doneCount / services.length * 100) + '%';
 }
 var chain = Promise.resolve();
 services.forEach(function (service) {
 chain = chain.then(function () {
+setDetail(service.endpoint, '检测中…');
 var p;
 try {
 p = fetchResult(service.endpoint);
@@ -399,15 +447,13 @@ return p.then(function (result) {
 doneCount++;
 results.push({ name: service.name, status: result.status});
 setDot(service.endpoint, result.status);
-var shortMsg = '';
-if (result.status === 'success') shortMsg = '可用';
-else if (result.status === 'partial') shortMsg = '仅部分';
-else shortMsg = '不可用';
-appendLiveResult(service.name, result.status, shortMsg);
+setDetail(service.endpoint, shortDetail(result));
+appendLiveResult(service.name, result.status, shortDetail(result));
 }).catch(function () {
 doneCount++;
 results.push({ name: service.name, status: 'failed'});
 setDot(service.endpoint, 'failed');
+setDetail(service.endpoint, '检测失败');
 appendLiveResult(service.name, 'failed', '检测失败');
 }).then(function () {
 return new Promise(function (r) { setTimeout(r, 250);});
@@ -436,8 +482,8 @@ box.appendChild(sum);
 }
 var title = document.getElementById('popup-title');
 if (title) title.textContent = '一键全测结果';
-var msg = document.getElementById('popup-message');
-if (msg) msg.textContent = '';
+var barDone = document.getElementById('progress-bar');
+if (barDone) barDone.style.width = '100%';
 var badgeEl = document.getElementById('popup-badge');
 if (badgeEl) badgeEl.innerHTML = badge;
 restoreBtn();
