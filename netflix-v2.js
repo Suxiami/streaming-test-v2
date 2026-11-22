@@ -153,9 +153,9 @@ async function nfTestV2() {
     finish();
 }
 
-nfTestV2().then(() => {
-    $done();
-}).catch(error => {
+// 注意：finish() 里已经调过一次 $done，不要再调第二次，
+// 否则第二次空 $done 会把第一次的检测结果覆盖掉
+nfTestV2().catch(error => {
     logWithTimestamp(`\n❌ 发生错误: ${JSON.stringify({ error: error }, null, 2)}`);
     result = { status: "failed", message: "Netflix: 检测失败 ❗️" };
     finish();

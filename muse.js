@@ -43,10 +43,13 @@ async function WebTest_Muse() {
             log(`📄 响应状态码: ${response.status}`);
             const body = (data || '').toLowerCase();
             log(`📄 响应体长度: ${data ? data.length : 0} 字符`);
-            const isBlocked = body.includes('blocked') ||
-                              body.includes('access denied') ||
+            // 只认明确的地区限制字样：'blocked'、'access denied' 这种通用词
+            // 在正常页面 JS/CSS 里很常见，会误判成不可用
+            const isBlocked = body.includes('unsupported_country') ||
                               body.includes('not available in your country') ||
-                              body.includes('unsupported_country');
+                              body.includes('is not available in your country') ||
+                              body.includes('country is not supported') ||
+                              body.includes('not supported in your country');
             log(`🔍 是否含拦截字样: ${isBlocked}`);
 
             if (response.status === 200 && !isBlocked) {

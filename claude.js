@@ -43,10 +43,13 @@ async function WebTest_Claude() {
             log(`📄 响应状态码: ${response.status}`);
             const body = (data || '').toLowerCase();
             log(`📄 响应体长度: ${data ? data.length : 0} 字符`);
+            // 只认明确的地区限制字样：'access denied' 在正常页面里也常见，会误判
             const isUnsupported = body.includes('unsupported_country') ||
                                   body.includes('not available in your country') ||
+                                  body.includes('is not available in your country') ||
                                   body.includes('app unavailable in your country') ||
-                                  body.includes('access denied');
+                                  body.includes('country is not supported') ||
+                                  body.includes('not supported in your country');
             log(`🔍 是否含地区限制字样: ${isUnsupported}`);
 
             if (response.status === 200 && !isUnsupported) {
