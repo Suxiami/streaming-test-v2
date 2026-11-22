@@ -363,10 +363,29 @@ function restoreBtn() {
 testingAll = false;
 if (btn) { btn.disabled = false; btn.textContent = '一键全测';}
 }
-try {
-showPopup('一键全测', '<span class="loading">正在逐个检测，请稍候…</span>', '<div class="spinner"></div>正在测试 ' + services.length + ' 个服务…');
-} catch (e) {}
 var results = [];
+var doneCount = 0;
+// 先弹出一个空的进度框，每测完一个就往里面加一行
+try {
+showPopup('一键全测', '<span class="loading">正在逐个检测… 0 / ' + services.length + '</span>', '<div id="live-results"></div>');
+} catch (e) {}
+function appendLiveResult(name, status, msg) {
+var box = document.getElementById('live-results');
+if (!box) return;
+var mark = status === 'success' ? '✅' : (status === 'partial' ? '⚠️' : '❌');
+var row = document.createElement('div');
+row.className = 'summary-row';
+var left = document.createElement('span');
+left.textContent = name;
+var right = document.createElement('span');
+right.textContent = mark + ' ' + (msg || '');
+row.appendChild(left);
+row.appendChild(right);
+box.appendChild(row);
+// 更新标题里的进度
+var title = document.getElementById('popup-title');
+if (title) title.textContent = '一键全测 (' + doneCount + ' / ' + services.length + ')';
+}
 var chain = Promise.resolve();
 services.forEach(function (service) {
 chain = chain.then(function () {
@@ -377,11 +396,19 @@ p = fetchResult(service.endpoint);
 p = Promise.reject(new Error('fetch 不可用'));
 }
 return p.then(function (result) {
+doneCount++;
 results.push({ name: service.name, status: result.status});
 setDot(service.endpoint, result.status);
+var shortMsg = '';
+if (result.status === 'success') shortMsg = '可用';
+else if (result.status === 'partial') shortMsg = '仅部分';
+else shortMsg = '不可用';
+appendLiveResult(service.name, result.status, shortMsg);
 }).catch(function () {
+doneCount++;
 results.push({ name: service.name, status: 'failed'});
 setDot(service.endpoint, 'failed');
+appendLiveResult(service.name, 'failed', '检测失败');
 }).then(function () {
 return new Promise(function (r) { setTimeout(r, 250);});
 });
@@ -389,13 +416,30 @@ return new Promise(function (r) { setTimeout(r, 250);});
 });
 chain.then(function () {
 var okCount = results.filter(function (x) { return x.status === 'success';}).length;
-var html = '';
-results.forEach(function (x) {
-var mark = x.status === 'success'? '✅': (x.status === 'partial'? '⚠️': '❌');
-html += '<div class="summary-row"><span>' + x.name + '</span><span>' + mark + '</span></div>';
-});
-var badge = '<span class="' + (okCount === results.length? 'ok': (okCount > 0? 'warn': 'fail')) + '">可用 ' + okCount + ' / ' + results.length + '</span>';
-showPopup('一键全测结果', badge, html);
+var badge = '<span class="' + (okCount === results.length ? 'ok' : (okCount > 0 ? 'warn' : 'fail')) + '">可用 ' + okCount + ' / ' + results.length + '</span>';
+// 最后在进度列表下面加一行汇总
+var box = document.getElementById('live-results');
+if (box) {
+var sum = document.createElement('div');
+sum.className = 'summary-row';
+sum.style.borderTop = '1px solid rgba(255,255,255,.2)';
+sum.style.marginTop = '10px';
+sum.style.paddingTop = '10px';
+sum.style.fontWeight = 'bold';
+var l = document.createElement('span');
+l.textContent = '汇总';
+var r = document.createElement('span');
+r.textContent = '可用 ' + okCount + ' / ' + results.length;
+sum.appendChild(l);
+sum.appendChild(r);
+box.appendChild(sum);
+}
+var title = document.getElementById('popup-title');
+if (title) title.textContent = '一键全测结果';
+var msg = document.getElementById('popup-message');
+if (msg) msg.textContent = '';
+var badgeEl = document.getElementById('popup-badge');
+if (badgeEl) badgeEl.innerHTML = badge;
 restoreBtn();
 }).catch(function () {
 showPopup('一键全测失败', '<span class="fail">检测失败</span>', '请检查网络连接或分流规则');
