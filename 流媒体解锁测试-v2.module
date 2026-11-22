@@ -1,0 +1,85 @@
+#!url=https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/流媒体解锁测试-v2.module
+#!name= 流媒体解锁测试 v2
+#!desc= https://streaming.test
+
+# ============================================================
+# 流媒体与 AI 解锁检测 v2（基于 Sage 原版改进）
+# 改进点：
+#  1. 前端重写：图标全部内联 SVG（零外链），分组展示，新增一键全测
+#  2. Netflix 双片名检测：区分自制剧 / 非自制 / 完整全库
+#  3. 新增 AI 检测：Muse、Claude、Gemini（原版只有 ChatGPT）
+#
+# ⚠️ 部署说明（必读）：
+#  下面标 [占位] 的 5 个 script-path 指向你自己的托管地址，
+#  安装前必须把
+#    https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/
+#  替换成你真实的地址，例如你传到 GitHub 后的 raw 链接：
+#    https://raw.githubusercontent.com/你的用户名/你的仓库/main/streaming-test/v2/front-end-v2.js
+#  其他未改动的服务仍沿用 Sage 原版 GitHub 地址，不用动。
+#  也可以把全部 JS 文件传到同一个地方，再把所有 script-path 统一改掉。
+# ============================================================
+
+[Script]
+
+Bahamut = type=http-request, pattern=^https:\/\/streaming\.test\/bahamut\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/bahamuts.js, timeout=60
+
+Steam = type=http-request, pattern=^https:\/\/streaming\.test\/steam\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/steam.js, timeout=60
+
+Bilibili = type=http-request, pattern=^https:\/\/streaming\.test\/bilibili\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/bilibili.js, timeout=60
+
+Spotify = type=http-request, pattern=^https:\/\/streaming\.test\/spotify\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/spotify.js, timeout=60
+
+Scamalytics = type=http-request, pattern=^https:\/\/streaming\.test\/scamalytics\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/scamalytics.js, timeout=60
+
+Disney = type=http-request, pattern=^https:\/\/streaming\.test\/disney\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/disney.js, timeout=60
+
+Netflix = type=http-request, pattern=^https:\/\/streaming\.test\/netflix\/?$, script-path=https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/netflix-v2.js, timeout=60
+
+ChatGPT = type=http-request, pattern=^https:\/\/streaming\.test\/chatgpt\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/chatgpt.js, timeout=60
+
+Muse = type=http-request, pattern=^https:\/\/streaming\.test\/muse\/?$, script-path=https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/muse.js, timeout=60
+
+Claude = type=http-request, pattern=^https:\/\/streaming\.test\/claude\/?$, script-path=https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/claude.js, timeout=60
+
+Gemini = type=http-request, pattern=^https:\/\/streaming\.test\/gemini\/?$, script-path=https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/gemini.js, timeout=60
+
+Tiktok = type=http-request, pattern=^https:\/\/streaming\.test\/tiktok\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/tiktok.js, timeout=60
+
+YouTube = type=http-request, pattern=^https:\/\/streaming\.test\/youtube\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/youtube.js, timeout=60
+
+HBO Max = type=http-request, pattern=^https:\/\/streaming\.test\/max\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/max.js, timeout=60
+
+PrimeVideo = type=http-request, pattern=^https:\/\/streaming\.test\/primevideo\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/primevideo.js, timeout=60
+
+Bing = type=http-request, pattern=^https:\/\/streaming\.test\/bing\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/bing.js, timeout=60
+
+ニコニコ = type=http-request, pattern=^https:\/\/streaming\.test\/nicovideo\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/niconico.js, timeout=60
+
+Google Play = type=http-request, pattern= ^https:\/\/streaming\.test\/googleplay\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/googleplay.js, timeout=60
+
+Wikipedia = type=http-request, pattern= ^https:\/\/streaming\.test\/wikipedia\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/wikipedia.js, timeout=60
+
+Starz = type=http-request, pattern= ^https:\/\/streaming\.test\/starz\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/starz.js, timeout=60
+
+iQIYI = type=http-request, pattern= ^https:\/\/streaming\.test\/iqiyi\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/iqiyi.js, timeout=60
+
+DAZN = type=http-request, pattern= ^https:\/\/streaming\.test\/dazn\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/dazn.js, timeout=60
+
+ParamountPlus = type=http-request, pattern= ^https:\/\/streaming\.test\/paramountplus\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/paramountplus.js, timeout=60
+
+ViuTV = type=http-request, pattern= ^https:\/\/streaming\.test\/viutv\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/viutv.js, timeout=60
+
+Now E = type=http-request, pattern= ^https:\/\/streaming\.test\/nowe\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/nowe.js, timeout=60
+
+KKTV = type=http-request, pattern= ^https:\/\/streaming\.test\/kktv\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/kktv.js, timeout=60
+
+LINE TV = type=http-request, pattern= ^https:\/\/streaming\.test\/linetv\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/linetv.js, timeout=60
+
+IPv6 = type=http-request, pattern= ^https:\/\/streaming\.test\/ip\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/ip.js, timeout=60
+
+Surfsharkdns = type=http-request, pattern= ^https:\/\/streaming\.test\/dns\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/surfsharkdns.js, timeout=60
+
+Front-end = type=http-request, pattern=^https:\/\/streaming\.test\/$, script-path=https://raw.githubusercontent.com/你的GitHub用户名/你的仓库名/main/streaming-test/v2/front-end-v2.js, timeout=60
+
+[MITM]
+hostname = %APPEND% streaming.test
