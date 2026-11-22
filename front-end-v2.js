@@ -313,25 +313,13 @@ return code;
 function shortDetail(result) {
 var msg = (result && result.message) || '';
 if (!msg) return result.status === 'success' ? '可用' : '不可用';
-// 只取第一行（弹窗里那串东西的第一行就有地区+国旗）
-var firstLine = msg.split('\n')[0] || msg;
-// 去掉开头的服务名前缀，比如 "Netflix: "、"YouTube："、"Muse: "
+var nl = msg.indexOf('\n');
+var firstLine = nl >= 0 ? msg.substring(0, nl) : msg;
 firstLine = firstLine.replace(/^[^:：]+[:：]\s*/, '');
-// 如果第一行里已经有国旗，直接返回第一行
-if (/[\uD83C][\uDDE6-\uDDFF]/.test(firstLine)) return firstLine;
-// 否则试着从消息里提取地区代码，转成国旗+国家名
+if (firstLine) return firstLine;
 var m = msg.match(/地区[:：] *([A-Z]{2})/);
 if (!m) m = msg.match(/Region: *([A-Z]{2})/);
-if (m) {
-var region = countryText(m[1]);
-if (result.status === 'success') {
-if (msg.indexOf('全库') !== -1) return region + ' · 全库';
-if (msg.indexOf('仅自制') !== -1 || msg.indexOf('仅部分') !== -1) return region + ' · 仅自制';
-return region;
-}
-if (result.status === 'partial') return region + ' · 仅部分';
-return region + ' · 不可用';
-}
+if (m) return countryText(m[1]);
 if (result.status === 'success') return '可用';
 if (result.status === 'partial') return '仅部分';
 return '不可用';

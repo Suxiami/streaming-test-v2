@@ -14,7 +14,7 @@
 #  安装前必须把
 #    https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/
 #  替换成你真实的地址，例如你传到 GitHub 后的 raw 链接：
-#    https://raw.githubusercontent.com/你的用户名/你的仓库/main/streaming-test/v2/front-end-v2.js?v=260
+#    https://raw.githubusercontent.com/你的用户名/你的仓库/main/streaming-test/v2/front-end-v2.js?v=261
 #  其他未改动的服务仍沿用 Sage 原版 GitHub 地址，不用动。
 #  也可以把全部 JS 文件传到同一个地方，再把所有 script-path 统一改掉。
 # ============================================================
@@ -79,7 +79,7 @@ IPv6 = type=http-request, pattern= ^https:\/\/streaming\.test\/ip\/?$, script-pa
 
 Surfsharkdns = type=http-request, pattern= ^https:\/\/streaming\.test\/dns\/?$, script-path=https://raw.githubusercontent.com/huskydsb/Shadowrocket/main/Streaming/js/surfsharkdns.js, timeout=60
 
-Front-end = type=http-request, pattern=^https:\/\/streaming\.test\/$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/front-end-v2.js?v=260, timeout=60
+Front-end = type=http-request, pattern=^https:\/\/streaming\.test\/$, script-path=https://cdn.jsdelivr.net/gh/Suxiami/streaming-test-v2@main/front-end-v2.js?v=261, timeout=60
 
 [MITM]
 hostname = %APPEND% streaming.test
